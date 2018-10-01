@@ -35,10 +35,11 @@ class NotesRepo(object):
         
         return path
 
-    def get_files(self, sub_dir=None):
+    def get_files(self, sub_dir=None, just_root=False):
         path_str = self.path(sub_dir=sub_dir)
         paths = {}
         excludes = [".git"]
+
         for root, directories, filenames in os.walk(path_str, topdown=True):
             directories[:] = [d for d in directories if d not in excludes] 
             for filename in filenames: 
@@ -48,7 +49,9 @@ class NotesRepo(object):
                         paths[filename].append(full_path)
                     else:
                         paths[filename] = [full_path]
-        
+
+            if just_root:
+                break
 
         return paths
 
@@ -99,15 +102,16 @@ def cli(ctx, notes_home, git_sync, config, verbose, private):
 @click.argument('category', required=False, type=click.Path())
 @click.option('--show-path', '-a', is_flag=True)
 @click.option('--show-category', '-c', is_flag=True)
+@click.option('--just-root', '-j', is_flag=True)
 @click.option('--tag', '-t', default='ROOT',
               help='Filter based on tag')           
 @pass_repo
-def list_files(repo, category, show_path, show_category, tag):
+def list_files(repo, category, show_path, show_category, just_root, tag):
     """Lists Notes.
     Recursively lists notes, either from the root category or a chosen category.
 
     """
-    paths = repo.get_files(category)
+    paths = repo.get_files(category, just_root)
 
     for entry in paths.keys():
         for item in paths[entry]:
