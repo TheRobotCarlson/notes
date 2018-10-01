@@ -21,3 +21,10 @@ $RECYCLE.BIN/
 # =========================
 # Operating System Files
 # =========================
+notetaker.egg-info/dependency_links.txt
+notetaker.egg-info/PKG-INFO
+notetaker.egg-info/SOURCES.txt
+notetaker.egg-info/top_level.txt
+notetaker.egg-info/requires.txt
+*.pyc
+notetaker.egg-info/entry_points.txt
